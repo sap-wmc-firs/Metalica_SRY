@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Hello Socket</title>
+   </head>
+   <script src = "/socket.io/socket.io.js"></script>
+   
+   <script>
+      var socket = io();
+      setTimeout(function(){
+        socket.emit('REFENTITY', {entity: 'locations'});
+      },1000);
+      setTimeout(function(){
+        socket.emit('REFENTITY', {entity: 'commodities'});
+      },3000);
+      setTimeout(function(){
+        socket.emit('REFENTITY', {entity: 'counterparties'});
+      },5000);
+      socket.on('REFENTITY', function(res){
+          document.write("<h4>"+ res.entity +"</h4>" + res.data + "<br/><br/><br/>");
+      });
+   </script>
+   <body>Hello world</body>
+</html>

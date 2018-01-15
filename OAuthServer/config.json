@@ -1,0 +1,9 @@
+{
+    "mainRoute": "tradeservice",
+    "servicePort": 9004, 
+    "eurekaPort": 9000,
+    "eurekaHost":"127.0.0.1",
+    "statusCheckURL": "http://localhost:9004/tradeservice/health",
+    "producerClient" : "http://localhost:9002/producer/addTradeToQueue",
+    "eurekaServiceRegisteryName": "trade-data-service"
+}

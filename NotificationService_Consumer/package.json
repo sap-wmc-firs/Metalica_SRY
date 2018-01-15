@@ -1,0 +1,20 @@
+{
+  "name": "notificationservice_consumer",
+  "version": "1.0.0",
+  "description": "notificationservice_consumer",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "cors": "^2.8.4",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "request": "^2.81.0",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {}
+}

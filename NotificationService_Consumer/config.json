@@ -1,0 +1,8 @@
+{
+    "mainRoute": "consumer",
+    "servicePort": 9003, 
+    "eurekaPort": 9000,
+    "eurekaHost":"127.0.0.1",
+    "statusCheckURL": "http://localhost:9003/consumer/health",
+    "eurekaServiceRegisteryName": "consumer-client"
+}

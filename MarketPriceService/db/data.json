@@ -1,0 +1,58 @@
+[
+    {
+      "symbol": "COIL",
+      "price": "122"
+    },
+    {
+      "symbol": "GOLD",
+      "price": "1321"
+    },
+    {
+      "symbol": "SLVR",
+      "price": "433"
+    },
+    {
+      "symbol": "NGAS",
+      "price": "122"
+    },
+    {
+      "symbol": "ALMN",
+      "price": "333"
+    },
+    {
+      "symbol": "COPR",
+      "price": "434"
+    },
+    {
+      "symbol": "NCKL",
+      "price": "433"
+    },
+    {
+      "symbol": "LEAD",
+      "price": "654"
+    },
+    {
+      "symbol": "ZINC",
+      "price": "23"
+    },
+    {
+      "symbol": "COTN",
+      "price": "43"
+    },
+    {
+      "symbol": "CBLT",
+      "price": "432"
+    },
+    {
+      "symbol": "SUGR",
+      "price": "123"
+    },
+    {
+      "symbol": "PTRO",
+      "price": "323"
+    },
+    {
+      "symbol": "DMND",
+      "price": "323"
+    }
+  ]

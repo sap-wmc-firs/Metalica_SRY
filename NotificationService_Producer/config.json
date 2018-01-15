@@ -1,0 +1,8 @@
+{
+    "mainRoute": "producer",
+    "servicePort": 9002, 
+    "eurekaPort": 9000,
+    "eurekaHost":"127.0.0.1",
+    "statusCheckURL": "http://localhost:9002/producer/health",
+    "eurekaServiceRegisteryName": "producer-client"
+}

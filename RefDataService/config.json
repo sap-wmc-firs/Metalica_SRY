@@ -1,0 +1,8 @@
+{
+    "mainRoute": "refdataservice",
+    "servicePort": 9005, 
+    "eurekaPort": 9000,
+    "eurekaHost":"127.0.0.1",
+    "statusCheckURL": "http://localhost:9005/refdataservice/health",
+    "eurekaServiceRegisteryName": "ref-data-service"
+}

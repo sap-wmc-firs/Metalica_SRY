@@ -1,0 +1,21 @@
+{
+  "name": "metal-price-service",
+  "version": "1.0.0",
+  "description": "Metal Price Service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sitaram",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "mongodb": "^2.2.33",
+    "request": "^2.83.0",
+    "eureka-js-client": "^4.3.0",
+    "winston": "^2.4.0"
+  }
+}

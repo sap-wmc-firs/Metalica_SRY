@@ -1,0 +1,22 @@
+[
+  {
+	"tradeId": 1001,
+    "tradeDate": "23-03-2017",
+    "commodity": "AL",
+    "side": "Buy",
+    "qty": 100,
+    "price": "$1,860.75",
+    "counterParty": "Lorem",
+    "location": "SG"
+  },
+  {
+	"tradeId": 1002,
+    "tradeDate": "23-03-2017",
+    "commodity": "ZN",
+    "side": "Sell",
+    "qty": 50,
+    "price": "$1,860.75",
+    "counterParty": "Dolor",
+    "location": "LN"
+  }
+] 

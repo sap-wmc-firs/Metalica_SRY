@@ -1,0 +1,25 @@
+{
+  "name": "notificationservice_producer",
+  "version": "1.0.0",
+  "description": "notificationservice_producer",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "body-parser": "^1.17.2",
+    "eureka-js-client": "^4.3.0",
+    "cors": "^2.8.4",
+    "express": "^4.15.4"
+  },
+  "devDependencies": {},
+  "jest": {
+    "setupFiles": [
+      "./test-config/setupTests.js",
+      "./test-config/browser-mocks.js"
+    ]
+  }
+}
