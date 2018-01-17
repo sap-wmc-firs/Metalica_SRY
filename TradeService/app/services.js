@@ -1,6 +1,7 @@
 var express    = require('express');
 const mongoDB = require('../db/mongodb');
 var config = require('../config.json'); 
+var request = require('request');
 
 var welcome = function(req, res, next) {
 	res.json({ message: 'Welcome !! Its up.' });   
@@ -198,7 +199,9 @@ function updateTradeServiceRequest(res, socket, req) {
 							obj
 					)
 					var successMessage = "trade updated.";
-					sendDataToNotificationService(obj);
+					var dataToSend = JSON.stringify(obj);
+					console.log(dataToSend);
+					sendDataToNotificationService(dataToSend);
 					if (res) {
                         res.end(successMessage);
                     } else {
@@ -260,6 +263,7 @@ function deleteTradeServiceRequest(res, socket, req) {
 }
 
 function sendDataToNotificationService(obj) {
+	console.log("object : "+obj);
 	var headers = {
         'User-Agent':       'Super Agent/0.0.1',
         'Content-Type':     'application/json'
@@ -271,15 +275,26 @@ function sendDataToNotificationService(obj) {
 		headers: headers,
         body: obj
 	};
+
 	console.log("Sending request to notification service.");
-	request(options, function(error, response, body) {
+	/*request(options, function(error, response, body) {
         if(error) {
             console.log(error);
         } else {
             console.log(response);
             console.log(body);
         }
-    });
+	});*/
+	
+	// Start the request
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // Print out the response body
+            console.log(body)
+        } else {
+			console.log(error);
+		}
+    })
 }
 
 module.exports = function(app) {

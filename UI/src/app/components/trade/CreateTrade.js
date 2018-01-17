@@ -120,12 +120,13 @@ export default class CreateTrade extends Component{
         tradeObj.counterParty = "BBC";
         tradeObj.commodity = "ALMN"
         tradeObj.location = "LON";
+        tradeObj.status = "OPEN";
 
         this.state.trade = tradeObj;
         
         console.log(this.state.trade);
 
-        fetch('http://localhost:9001/api/trade-data-service/tradeservice/updateTrade', {
+        fetch('http://localhost:9001/api/trade-data-service/tradeservice/update/trade', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
