@@ -26,7 +26,7 @@ import Typography from 'material-ui/Typography';
           <AppBar position="static" color="default">
              <Toolbar>
                <Typography type="title" color="inherit">
-               Copyrights@2018, React App
+               FSD - Mettalica &copy; 2018, Sapient
                </Typography>
              </Toolbar>
            </AppBar>

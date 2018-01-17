@@ -22,13 +22,23 @@ export default class CreateTrade extends Component{
     constructor(props){
         super(props);
         this.classes = props;
-        this.state ={
+        this.state = {
             commodities : [],
             locations: [],
             counterParties: [],
             price: '',
-            elements:{},
-            trade:{commodity:'',location:'',counterParty:''}
+            elements: {},
+            trade: {
+                tradeId: null,
+                side: 'Buy',
+                qty: 1,
+                price: '',
+                tradeDate: '',
+                status: 'OPEN',
+                counterParty: '',
+                commodity: '',
+                location: ''
+            }
         }
     }
     
@@ -73,14 +83,15 @@ export default class CreateTrade extends Component{
         this.state.socket = io.connect('http://localhost:9003');
 
         this.state.socket.on( 'connect', () => {
-            this.state.socket.emit( 'join channel', 'marketDataModified', function( confirmation ) {
-                console.log( confirmation );
+            //alert("connected..");
+            this.state.socket.emit( 'join channel', 'MARKET_DATA_MODIFIED', function( confirmation ) {
+                //console.log( confirmation );
             } );
         } );
         this.state.socket.on( 'connect_error', () => {
-                //alert( "There seems to be an issue with Data Notification Service! Please contact #FIIDS" );
+                alert( "There seems to be an issue with Data Notification Service!");
         } );
-        this.state.socket.on( 'market data modified', ( socketData ) => {
+        this.state.socket.on('MARKET_DATA_MODIFIED', ( socketData ) => {
             var respData = JSON.parse(socketData);
                if(respData.length > 0){
                    var elements = {};
@@ -94,11 +105,34 @@ export default class CreateTrade extends Component{
     
     setPriceValue(event){
         this.setState({price:this.state.elements[event.target.value]});
+        this.setState({price:this.state.elements[event.target.value]});
     }
 
     saveTrade() {
         console.log("save trade called..");
         console.log(this.state.trade);
+        var tradeObj = new Object();
+        tradeObj.tradeId = this.props.trade.tradeId;
+        tradeObj.side = this.props.trade.side;
+        tradeObj.quantity = this.props.trade.quantity;
+        tradeObj.price = this.state.price;
+        tradeObj.tradeDate = this.props.trade.tradeDate;
+        tradeObj.counterParty = "BBC";
+        tradeObj.commodity = "ALMN"
+        tradeObj.location = "LON";
+
+        this.state.trade = tradeObj;
+        
+        console.log(this.state.trade);
+
+        fetch('http://localhost:9001/api/trade-data-service/tradeservice/updateTrade', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tradeObj)
+          })
     }
 
     render(){

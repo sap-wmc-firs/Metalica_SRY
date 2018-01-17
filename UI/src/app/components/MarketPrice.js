@@ -34,9 +34,9 @@ class MarketPrice extends React.Component {
       // listen to messages on socket
       // built-in message
       this.state.socket.on( 'connect', () => {
-          alert("connected..");
+          //alert("connected..");
           this.state.socket.emit( 'join channel', 'MARKET_DATA_MODIFIED', function( confirmation ) {
-            alert( confirmation );
+            //alert( confirmation );
         });
       } );
       this.state.socket.on( 'connect_error', () => {

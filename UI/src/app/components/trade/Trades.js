@@ -46,14 +46,14 @@ export default class Trades extends Component{
         // listen to messages on socket
         // built-in message
         this.state.socket.on( 'connect', () => {
-            this.state.socket.emit( 'join channel', 'tradeAdded', function( confirmation ) {
-                console.log( confirmation );
+            this.state.socket.emit('join channel', 'TRADE_ADDED', function( confirmation ) {
+                //console.log( confirmation );
             } );
         } );
         this.state.socket.on( 'connect_error', () => {
                 alert( "There seems to be an issue with Data Notification Service !!" );
         } );
-        this.state.socket.on( 'trade added', ( socketData ) => {
+        this.state.socket.on( 'TRADE_ADDED', ( socketData ) => {
             var respData = JSON.parse(socketData);
                if(respData.length > 0){
                    this.props.actions.initTrades(respData);

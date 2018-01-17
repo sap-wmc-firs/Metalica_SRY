@@ -75,6 +75,7 @@ function getAllTradesServiceRequest(res, socket) {
 }
 
 function updateTradeServiceRequest(res, socket, req) {
+	console.log("req.body ::"+req.body);
 	if (req!==undefined && req!==null) {
 		var side = req.side;
 		if (side===undefined || side===null) {
@@ -259,10 +260,16 @@ function deleteTradeServiceRequest(res, socket, req) {
 }
 
 function sendDataToNotificationService(obj) {
+	var headers = {
+        'User-Agent':       'Super Agent/0.0.1',
+        'Content-Type':     'application/json'
+	}
+	
 	var options = {
 		url : config.producerClient,
 		method : 'POST',
-		json : obj
+		headers: headers,
+        body: obj
 	};
 	console.log("Sending request to notification service.");
 	request(options, function(error, response, body) {

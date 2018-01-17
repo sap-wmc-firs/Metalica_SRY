@@ -1,22 +1,22 @@
 [
   {
 	"tradeId": 1001,
-    "tradeDate": "23-03-2017",
-    "commodity": "AL",
-    "side": "Buy",
-    "qty": 100,
-    "price": "$1,860.75",
-    "counterParty": "Lorem",
-    "location": "SG"
+    "tradeDate": "23-03-2017 10:02:21",
+    "commodity": "GOLD",
+    "side": "BUY",
+    "quantity": 100,
+    "price": "1860.75",
+    "counterParty": "MOSL",
+    "location": "NYC"
   },
   {
 	"tradeId": 1002,
-    "tradeDate": "23-03-2017",
-    "commodity": "ZN",
-    "side": "Sell",
-    "qty": 50,
-    "price": "$1,860.75",
-    "counterParty": "Dolor",
-    "location": "LN"
+    "tradeDate": "18-09-2017 23:05:12",
+    "commodity": "SLVR",
+    "side": "SELL",
+    "quantity": 50,
+    "price": "1950",
+    "counterParty": "FFSIL",
+    "location": "LON"
   }
 ] 
