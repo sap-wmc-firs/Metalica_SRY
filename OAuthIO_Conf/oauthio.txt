@@ -1,0 +1,31 @@
+oauth/user/06.sitaram@gmail.com
+
+
+oauth/metalica app
+ee-zUzpQqr9ZeCMPlmWQk-EKfb4
+mGTkPyT39aQ9TaY9hmZVmfNNbDo
+
+fb/metallica
+APP ID : 210051786224979
+APP secret : fb661fa0a9c7e41d86b0f4a12ebd1557
+
+**********************************
+appname : oauth
+displayname : Metallica
+appID : 210051786224979
+app secret : fb661fa0a9c7e41d86b0f4a12ebd1557
+**********************************
+
+
+OAuth.initialize('ee-zUzpQqr9ZeCMPlmWQk-EKfb4')
+OAuth.popup('facebook').done(function(result) {
+    console.log(result)
+    // do some stuff with result
+})
+
+{
+  "access_token": "EAACZCCn4aNVMBAMxqtALWwTLMfU1VZAXrbmBppIhk7UfXl2bghaxwja5VO6aneabZBjEjOpKszVqsNHG9tnE1FjGHrARDAYxbgZAA8IZBMC8ZAJyqowvII1lmwAPRpqupFNkh2ie7bR3xbfZCEEwcS9YG39b5w80d1G0zYZAOG3e1gZDZD",
+  "token_type": "bearer",
+  "expires_in": 5183999,
+  "provider": "facebook"
+}
