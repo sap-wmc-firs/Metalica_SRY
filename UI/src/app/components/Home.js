@@ -15,6 +15,9 @@ import { user } from 'react-icons-kit/fa/user';
 import TradesContainer from "../container/TradesContainer";
 import Transfers from "./Transfers";
 import Transports from "./Transports";
+import Avatar from 'material-ui/Avatar';
+import List from 'material-ui/List/List';
+import ListItem from 'material-ui/List/ListItem';
 
     const styles = theme => ({
         root: {
@@ -37,21 +40,13 @@ import Transports from "./Transports";
     constructor(props){
       super(props);
       this.state = {
-        tabValue: props.tabValue,
-        userName: 'sapient'
+        tabValue: props.tabValue
       }
-
       this.classes = props;
     }
 
     componentDidMount() {
-      var authURL = "http://localhost:9001/api/ref-data-service/refdataservice/username";
-      fetch(authURL)
-      .then(results => {
-        return results.json;
-      }).then(data => {
-        console.log(data);
-      })
+
     }
         
           handleChange = (event, value) => {
@@ -62,8 +57,7 @@ import Transports from "./Transports";
           render(){
             
             const tab = this.state.tabValue;
-            const uname = this.state.userName;
-
+           
             return (
               <div className={this.classes.root}>
                   <AppBar position="static">
@@ -71,14 +65,16 @@ import Transports from "./Transports";
                       <Tab value="trades" label="TRADES" />
                       <Tab value="transfers" label="TRANSFERS" />
                       <Tab value="transports" label="TRANSPORTS" />
-                      <div>{uname} <Icon icon={user}/></div>
                     </Tabs> 
                   </AppBar>
                 
                   {tab === 'trades' && <TabContainer><TradesContainer /></TabContainer>}
                   {tab === 'transfers' && <TabContainer><Transfers /></TabContainer>}
                   {tab === 'transports' && <TabContainer><Transports /></TabContainer>}
+
+                  
               </div>
+              
             );
           }
             

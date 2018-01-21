@@ -4,6 +4,10 @@ import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import IconButton from 'material-ui/IconButton';
+import Icon from 'react-icons-kit';
+import { user } from 'react-icons-kit/fa/user';
+//import * as Colors from 'material-ui/styles/colors';
 
     const styles = theme => ({
       root: {
@@ -13,7 +17,7 @@ import Typography from 'material-ui/Typography';
       },
     });
 
-    class Footer extends React.Component {
+   class UserInfo extends React.Component {
   
       constructor(props){
         super(props);
@@ -21,22 +25,24 @@ import Typography from 'material-ui/Typography';
       }
 
       render() {
+        var uname = this.props.username;
         return (
           <div className={this.classes.root}>
-          <AppBar position="static" color="default">
+          <AppBar position="static" style={{ backgroundColor: '#CFD8DC' }}>
              <Toolbar>
-               <Typography type="title" color="inherit">
-               Sapient &copy; 2018
+               <Typography type="title" color="black">
+               FSD - Metallica | {uname} <Icon icon={user}/>
                </Typography>
-             </Toolbar>
+               </Toolbar>
+            
            </AppBar>
           </div>
         );
       }
     }
   
-    Footer.propTypes = {
+    UserInfo.propTypes = {
            classes: PropTypes.object.isRequired,
       };
   
-    export default withStyles(styles)(Footer);
+    export default withStyles(styles)(UserInfo);
