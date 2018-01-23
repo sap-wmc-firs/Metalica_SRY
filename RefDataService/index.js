@@ -59,3 +59,5 @@ function startServer() {
 }
 
 require("./app/services")(app);
+
+module.exports = app; // for testing
