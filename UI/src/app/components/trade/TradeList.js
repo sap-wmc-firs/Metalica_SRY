@@ -37,6 +37,10 @@ const styles = theme => ({
       this.props.setSelected(trade);
       this.props.showRightPanel('showTrade');
     } 
+      
+    hideShowPanel(){
+        this.props.showRightPanel('');
+    }
 
     loadEditPanel(){
       this.props.showRightPanel('editTrade');
@@ -47,6 +51,23 @@ const styles = theme => ({
         return true;
       else        
         return false;
+    }
+    
+    componentWillReceiveProps(nextProps){
+        var refData = nextProps.refData;
+        var commodities = {};
+        refData.commodities.forEach(item=>{
+            commodities[item.symbol] = item.name;
+       });
+        var counterParties = {};
+        refData.counterParties.forEach(item=>{
+            counterParties[item.symbol] = item.name;
+       });
+        var locations = {};
+        refData.locations.forEach(item=>{
+            locations[item.symbol] = item.name;
+       });
+       this.setState({commodities, counterParties, locations});
     }
 
     render() {
@@ -108,12 +129,12 @@ const styles = theme => ({
                         selected={isSelected} 
                         key={n.tradeId}>
                           <TableCell>{n.tradeDate}</TableCell>
-                          <TableCell>{n.commodity}</TableCell>
+                          <TableCell>{this.state.commodities[n.commodity]}</TableCell>
                           <TableCell>{n.side}</TableCell>
-                          <TableCell>{n.qty}</TableCell>
+                          <TableCell>{n.quantity}</TableCell>
                           <TableCell>{n.price}</TableCell>
-                          <TableCell>{n.counterParty}</TableCell>
-                          <TableCell>{n.location}</TableCell>
+                          <TableCell>{this.state.counterParties[n.counterParty]}</TableCell>
+                          <TableCell>{this.state.locations[n.location]}</TableCell>
                         </TableRow>
                       );
                     })}
@@ -136,9 +157,9 @@ const styles = theme => ({
               </Paper>
             </Col>
             <Col md={3} xs={12}>
-              {showRightPanel === 'showTrade' && <ShowTrade trade = {this.props.selected} editAction = { () => this.loadEditPanel()} />}
-              {showRightPanel === 'createTrade' && <CreateTrade isEditable='false' trade = {this.props} showRightPanel = {(panelName) => this.props.showRightPanel(panelName)}/>}
-              {showRightPanel === 'editTrade' && <CreateTrade isEditable='true' trade = {this.props.selected} showRightPanel = {(panelName) => this.props.showRightPanel(panelName)}/>}
+              {showRightPanel === 'showTrade' && <ShowTrade trade = {this.props.selected} editAction = { () => this.loadEditPanel()} hideShowPanel = {this.hideShowPanel.bind(this)}/>}
+              {showRightPanel === 'createTrade' && <CreateTrade isEditable='false' trade = {this.props} showRightPanel = {(panelName) => this.props.showRightPanel(panelName)} refData={this.props.refData}/>}
+              {showRightPanel === 'editTrade' && <CreateTrade isEditable='true' trade = {this.props.selected} showRightPanel = {(panelName) => this.props.showRightPanel(panelName)} refData={this.props.refData}/>}
             </Col>
           </Row>
         </div>

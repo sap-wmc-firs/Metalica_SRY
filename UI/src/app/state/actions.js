@@ -75,9 +75,36 @@ export function updateMarketPrice(mktPriceDataArr) {
 
 export function loadCounterPartyData(counterPartyData) {
     return {
-        type: ActionTypes.LOAD_COUNTER_PARTY_DATA,
+        type: ActionTypes.INIT_COUNTERPARTIES,
         payload: {
-            counterPartyData: counterPartyData
+            counterParties: counterPartyData
+        }
+    }
+}
+
+export function loadMarketPriceData(marketPrice) {
+    return {
+        type: ActionTypes.MKT_PRICE_UPDATED,
+        payload: {
+            marketPrice: marketPrice
+        }
+    }
+}
+
+export function loadCommodities(commodities) {
+    return {
+        type: ActionTypes.INIT_COMMODITIES,
+        payload: {
+            commodities: commodities
+        }
+    }
+}
+
+export function loadLocations(locations) {
+    return {
+        type: ActionTypes.INIT_LOCATIONS,
+        payload: {
+            locations: locations
         }
     }
 }
@@ -163,6 +190,42 @@ export function fetchCounterParties() {
         try {
             let counterPartyData = await service.fetchCounterParties();
             dispatch(loadCounterPartyData(counterPartyData));
+        }catch (error){
+            dispatch(initError(error.toString()));
+        }
+    }
+}
+
+export function fetchCommodities() {
+    // this function called by thung middleware
+    return async function(dispatch) {
+        try {
+            let commodities = await service.fetchCommodities();
+            dispatch(loadCommodities(commodities));
+        }catch (error){
+            dispatch(initError(error.toString()));
+        }
+    }
+}
+
+export function fetchLocations() {
+    // this function called by thung middleware
+    return async function(dispatch) {
+        try {
+            let locations = await service.fetchLocations();
+            dispatch(loadLocations(locations));
+        }catch (error){
+            dispatch(initError(error.toString()));
+        }
+    }
+}
+
+export function fetchMarketPrices() {
+    // this function called by thung middleware
+    return async function(dispatch) {
+        try {
+            let marketPrices = await service.fetchMarketPrices();
+            dispatch(loadMarketPriceData(marketPrices));
         }catch (error){
             dispatch(initError(error.toString()));
         }

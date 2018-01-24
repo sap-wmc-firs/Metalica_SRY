@@ -3,7 +3,7 @@
     "servicePort": 9006, 
     "eurekaPort": 9000,
     "eurekaHost":"127.0.0.1",
-    "priceRefreshPeriod" : 7,
+    "priceRefreshPeriod" : 45,
     "metalMinPrice" : 1250,
     "metalMaxPrice" : 1950,
     "statusCheckURL": "http://localhost:9006/mktpriceservice/health",

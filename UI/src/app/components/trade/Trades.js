@@ -23,25 +23,29 @@ export default class Trades extends Component{
     constructor(props){
         super(props);
         this.state = {
-            socket : null
+            socket : null,
+            refData : {},
+            trades: []
         }
     }
     
     componentWillReceiveProps(nextprops){
         console.log(nextprops);
+        this.setState({refData : {commodities: nextprops.commodities, locations: nextprops.locations,
+                              counterParties: nextprops.counterparties, marketPrices: nextprops.mktPrices}})
+        this.setState({trades: nextprops.trades});
+    }
+    
+    componentWillMount(){
+        this.props.actions.fetchCounterParties();
+        this.props.actions.fetchLocations();
+        this.props.actions.fetchCommodities();
+        this.props.actions.fetchMarketPrices();
     }
 
     componentDidMount() {
 
-        var authURL = "http://localhost:9001/api/ref-data-service/refdataservice/username";
-        fetch(authURL)
-        .then(results => {
-          return results.json;
-        }).then(data => {
-          console.log(data);
-        })
-        
-        this.state.socket = io.connect( 'http://localhost:9003/consumer' );
+        this.state.socket = io.connect( 'http://localhost:9003' );
 
         // listen to messages on socket
         // built-in message
@@ -54,7 +58,9 @@ export default class Trades extends Component{
                 alert( "There seems to be an issue with Data Notification Service !!" );
         } );
         this.state.socket.on( 'TRADE_ADDED', ( socketData ) => {
+            alert(socketData);
             var respData = JSON.parse(socketData);
+            //alert(respData);
                if(respData.length > 0){
                    this.props.actions.initTrades(respData);
                }
@@ -70,27 +76,46 @@ export default class Trades extends Component{
     setSelected(tradeObj){
         this.props.actions.setSelected(tradeObj);
     }
+    
+    showAll(){
+        this.setState({trades: this.props.trades});
+    }
+    
+    filterTrades(trade){
+        console.log(trade);
+        var tradeCopy = this.props.trades;
+        tradeCopy = tradeCopy.filter(tradeObj => {
+            var res = ((trade.commodity == ''? true : tradeObj.commodity == trade.commodity)
+                && (trade.counterParty == ''? true : tradeObj.counterParty == trade.counterParty)
+                   && (trade.location == ''? true : tradeObj.location == trade.location)
+                      && (trade.to != '' &&  trade.from != '' ? (Date.parse(trade.from) < Date.parse(tradeObj.tradeDate) && Date.parse(tradeObj.tradeDate) < Date.parse(trade.to)) : true)
+                         && (trade.side == '' ? true : tradeObj.side == trade.side)
+              );
+            console.log(res);
+            return res;
+        });
+        this.setState({trades: tradeCopy});
+    }
 
 
     render(){
         const {rightPanel, selected, trades} = this.props;
         return (
             <div>
-                <Row>
-                <Search />
-                </Row>
+                <Row><Search refData = {this.state.refData} filterTrades={this.filterTrades.bind(this)}
+                showAll={this.showAll.bind(this)}/></Row>
                 <Row>
                 <TradeList 
                     rightPanel = {this.props.rightPanel}
                     selected = {this.props.selected}
                     setSelected = {(tradeObj) => this.setSelected(tradeObj)}
-                    trades = {this.props.trades}
+                    trades = {this.state.trades}
+                    refData = {this.state.refData}
                     showRightPanel = {(panelName) => this.showRightPanel(panelName)}
-                ></TradeList>
+                />
                 </Row>
                 </div>
         );
-        
     }
 }
 

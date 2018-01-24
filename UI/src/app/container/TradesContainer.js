@@ -10,6 +10,9 @@ const mapStateToProps = (state) => {
         selected: state.tradeState.selected,
         trades: state.tradeState.trades,
         mktPrices: state.tradeState.mktPrices,
+        commodities: state.tradeState.commodities,
+        counterparties: state.tradeState.counterParties,
+        locations: state.tradeState.locations,
         loading: state.tradeState.loading,
         error: state.tradeState.error,
         errorMessage: state.tradeState.errorMessage

@@ -7,6 +7,7 @@ import Select from 'material-ui/Select';
 import TextField from 'material-ui/TextField';
 import { FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
+import Radio from 'material-ui/Radio';
 import Button from 'material-ui/Button';
 
  const styles = theme => ({
@@ -21,125 +22,148 @@ import Button from 'material-ui/Button';
     },
   });
 
-  
-  function clear(){
-    console.log("clear method");
-  }
 
-  function search(){
-    console.log("search method");
-  }
+export default class Search extends React.Component {
 
-  function Search(props) {
-    const { classes } = props;
-
+    constructor(props){
+        super(props);
+        this.state = {
+            tradeDate : '',
+            location : '',
+            commodity : '',
+            counterParty : '',
+            side : '',
+            toDate: '',
+            fromDate: ''
+        }
+        this.classes = props;
+    }
     
-    const state = {
-        "priceData": [],
-        "counterPartyData": [],
-        "locationData": [],
-        "commodityData": [],
-        "side": "Buy"
-      };
-  
-    return (
-      <form className={classes.container} noValidate>
+  clear(){
+    this.setState({
+        tradeDate : '',
+        location : '',
+        commodity : '',
+        counterParty : '',
+        side : '',
+        toDate: '',
+        fromDate: ''
+    })
+    this.props.showAll();
+  }
+
+  search(){
+    this.props.filterTrades({to:this.state.toDate, from:this.state.fromDate, location: this.state.location, 
+                            commodity: this.state.commodity, counterParty: this.state.counterParty,
+                            side: this.state.side})
+  }
+    
+  render(){
+      return (
+      <form className="row">
         <TextField
+          className="col-md-2"
+          style={{width: '13%'}}
           id="tradeDateSearch"
           label="Trade Date"
           type="date"
-          defaultValue=""
-          className={classes.textField}
+          value={this.state.fromDate}
+          onChange={(e) => this.setState({fromDate: e.target.value})}
+          //className={classes.textField}
           InputLabelProps={{
             shrink: true,
           }}
         /> 
-        to
         <TextField
+          className="col-md-2"
+          style={{width: '13%'}}
           id="toTradeDateSearch"
           label="To Trade Date"
           type="date"
-          defaultValue=""
-          className={classes.textField}
+          value={this.state.toDate}
+          onChange={(e) => this.setState({toDate: e.target.value})}
+          //className={classes.textField}
           InputLabelProps={{
             shrink: true,
           }}
         />
-        &emsp;
-        <FormControl className={classes.formControl}>
+        <FormControl className="col-md-1" >
           <InputLabel htmlFor="commoditySearch">Commodity</InputLabel>
-          <Select native defaultValue={0} input={<Input id="commoditySearch" />}>
+          <Select native defaultValue={0} input={<Input id="commoditySearch" />}
+value={this.state.commodity}
+          onChange={(e) => this.setState({commodity: e.target.value})}
+>
             <option value="0" />
-            {
-                state.commodityData.map( n => {
+            {'commodities' in this.props.refData ? 
+                this.props.refData.commodities.map( n => {
                     return (
-                        <option value={n.commodityId}>{n.commodity}</option>
+                        <option value={n.symbol}>{n.name}</option>
                     );
                 })
+                :
+                null
             }
           </Select>
         </FormControl>
-        &emsp;
-        <FormGroup row>
         {/* <InputLabel htmlFor="sideSearch">Side</InputLabel> */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.side === 'Buy'}
-              onChange={() => state.side='Buy'}
+        <FormControl className="col-md-1" style={{width: '5%'}}>
+            Buy
+            <Radio
+              checked={this.state.side === 'Buy'}
+              onChange={(e) => this.setState({side:'Buy'})}
               value="Buy"
+label="Buy"
             />
-          }
-          label="Buy"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.side === 'Sell'}
-              onChange={() => state.side='Sell'}
+          </FormControl>
+        <FormControl className="col-md-1" style={{width: '5%'}}>
+            Sell
+            <Radio
+              checked={this.state.side === 'Sell'}
+              onChange={(e) => this.setState({side:'Sell'})}
               value="Sell"
+label="Sell"
             />
-          }
-          label="Sell"
-        />
-        </FormGroup>
-        &emsp;
-        <FormControl className={classes.formControl}>
+        </FormControl>
+        <FormControl className="col-md-2">
           <InputLabel htmlFor="counterpartySearch">Counterparty</InputLabel>
-          <Select native defaultValue={0} input={<Input id="counterpartySearch" />}>
+          <Select native defaultValue={0} input={<Input id="counterpartySearch" />} 
+value={this.state.counterParty}
+          onChange={(e) => this.setState({counterParty: e.target.value})}
+>
           <option value="0" />
-          {
-              state.counterPartyData.map( n => {
+          {'counterParties' in this.props.refData ? 
+              this.props.refData.counterParties.map( n => {
                   return (
-                      <option value={n.counterPartyId}>{n.counterParty}</option>
+                      <option value={n.symbol}>{n.name}</option>
                   );
               })
+              :
+              null
           }
           </Select>
           {/* <FormHelperText>Uncontrolled</FormHelperText> */}
         </FormControl>
         &emsp;
-        <FormControl className={classes.formControl}>
+        <FormControl className="col-md-1">
           <InputLabel htmlFor="locationSearch">Location</InputLabel>
-          <Select native defaultValue={0} input={<Input id="locationSearch" />}>
+          <Select native defaultValue={0} input={<Input id="locationSearch" />}
+value={this.state.location}
+          onChange={(e) => this.setState({location: e.target.value})}
+>
           <option value="0" />
-          {
-              state.locationData.map( n => {
+          {'locations' in this.props.refData ? 
+              this.props.refData.locations.map( n => {
                   return (
-                      <option value={n.locationId}>{n.location}</option>
+                      <option value={n.symbol}>{n.name}</option>
                   );
               })
+              : null
           }
           </Select>
         </FormControl>
-        <Button className={classes.button} onClick={clear}>clear</Button>
-        <Button className={classes.button} onClick={search}>Search</Button>
+        <Button onClick={this.clear.bind(this)}>clear</Button>
+        <Button onClick={this.search.bind(this)}>Search</Button>
       </form>
     );
   }
-    
-  Search.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
-  
-  export default withStyles(styles)(Search);
+  }

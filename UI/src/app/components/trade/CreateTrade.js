@@ -28,53 +28,47 @@ export default class CreateTrade extends Component{
             counterParties: [],
             price: '',
             elements: {},
-            trade: {
-                tradeId: null,
-                side: 'Buy',
-                qty: 1,
-                price: '',
-                tradeDate: '',
-                status: 'OPEN',
-                counterParty: '',
-                commodity: '',
-                location: ''
-            }
+            counterParty: '',
+            commodity: '',
+            location: '',
+            side: '',
+            quantity: 0
         }
     }
     
     componentDidMount(){
-        fetch("http://localhost:9001/api/ref-data-service/refdataservice/entities/locations")
-            .then(response=>{
-            response.json().then(data=> {
-                console.log(data);
-                this.setState({locations:data});
-              });
-        }); 
-        fetch("http://localhost:9001/api/ref-data-service/refdataservice/entities/counterparties")
-            .then(response=>{
-            response.json().then(data=> {
-                console.log(data);
-                this.setState({counterParties:data});
-              });
-        }); 
-        fetch("http://localhost:9001/api/ref-data-service/refdataservice/entities/commodities")
-            .then(response=>{
-            response.json().then(data=> {
-                console.log(data);
-                this.setState({commodities:data});
-                fetch("http://localhost:9001/api/metal-price-service/mktpriceservice/price/all")
-                .then(response=>{
-                    response.json().then(data=> {
-                        console.log(data);
-                        var elements = {};
-                        data.forEach(item=>{
-                            elements[item.symbol] = item.price;
-                        })
-                        this.setState({elements:elements,price:elements[this.state.commodities[0].symbol]});
-                    });
-                }); 
+        if('trade' in this.props && this.props.isEditable){
+            this.setState(
+            {side : this.props.trade.side, 
+             quantity: this.props.trade.quantity, 
+             tradeDate: this.props.trade.tradeDate, 
+             commodity: this.props.trade.commodity,
+             location: this.props.trade.location,
+             counterParty: this.props.trade.counterParty
             });
-        }); 
+        }
+        
+        if('refData' in this.props){
+            this.setState({
+                locations:this.props.refData.locations,
+                 counterParties:this.props.refData.counterParties,
+                 commodities:this.props.refData.commodities
+            }) 
+            var elements = {};
+            var data = this.props.refData.marketPrices;
+            data.forEach(item=>{
+                elements[item.symbol] = item.price;
+            })
+            this.setState({elements:elements});
+            if(this.props.refData.commodities.length > 0){
+                this.setState({price:elements[this.props.refData.commodities[0].symbol]});
+            }
+            this.setState({
+                commodity: this.props.refData.commodities[0].symbol,
+                 location: this.props.refData.locations[0].symbol,
+                 counterParty: this.props.refData.counterParties[0].symbol
+            });
+        }
         
         if(this.props.isEditable == 'true'){
             this.setState({trade: this.props.trade})
@@ -104,23 +98,20 @@ export default class CreateTrade extends Component{
     }
     
     setPriceValue(event){
-        this.setState({price:this.state.elements[event.target.value]});
-        this.setState({price:this.state.elements[event.target.value]});
+        this.setState({price:this.state.elements[event.target.value], commodity:event.target.value});
     }
 
     saveTrade() {
         console.log("save trade called..");
-        console.log(this.state.trade);
         var tradeObj = new Object();
         tradeObj.tradeId = this.props.trade.tradeId;
-        tradeObj.side = this.props.trade.side;
-        tradeObj.quantity = this.props.trade.quantity;
+        tradeObj.side = this.state.side;
+        tradeObj.quantity = parseInt(this.state.quantity);
         tradeObj.price = this.state.price;
-        tradeObj.tradeDate = this.props.trade.tradeDate;
-        tradeObj.counterParty = "BBC";
-        tradeObj.commodity = "ALMN"
-        tradeObj.location = "LON";
-        tradeObj.status = "OPEN";
+        tradeObj.tradeDate = this.state.tradeDate;
+        tradeObj.counterParty = this.state.counterParty;
+        tradeObj.commodity = this.state.commodity;
+        tradeObj.location = this.state.location;
 
         this.state.trade = tradeObj;
         
@@ -129,11 +120,14 @@ export default class CreateTrade extends Component{
         fetch('http://localhost:9001/api/trade-data-service/tradeservice/update/trade', {
             method: 'POST',
             headers: {
-              'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(tradeObj)
           })
+    }
+    
+    handleChange(e){
+        this.setState({side: e.target.value});
     }
 
     render(){
@@ -146,7 +140,6 @@ export default class CreateTrade extends Component{
             ?
             <Typography type="Subheading" color="secondary">
                         Trade ID(): {this.props.trade.tradeId}
-                        <Icon icon={bin} />
                         </Typography>
             :
             <Typography type="Subheading" color="secondary">
@@ -165,7 +158,9 @@ export default class CreateTrade extends Component{
                                     id="tradeDateCT"
                                     label=""
                                     type="date"
-                                    defaultValue=""
+                                    defaultValue={this.state.tradeDate}
+                                    value={this.state.tradeDate}
+                                    onChange={(e)=> this.setState({tradeDate: e.target.value})}
                                     className={this.classes.textField}
                                     InputLabelProps={{
                                         shrink: true,
@@ -178,8 +173,8 @@ export default class CreateTrade extends Component{
                             <td>
                                 <FormControl className={this.classes.formControl}>
                                     {this.state.commodities.length > 0 ?
-            <Select native defaultValue={this.state.trade.commodity} 
-            input={<Input id="commodityCT" />}  onChange={this.setPriceValue.bind(this)} >
+            <Select native defaultValue={this.state.commodity} 
+            input={<Input id="commodityCT" />} value={this.state.commodity} onChange={this.setPriceValue.bind(this)} >
             {
                                         this.state.commodities.map(n=> {
                                             return (<option value={n.symbol}>{n.name}</option>);
@@ -198,8 +193,8 @@ export default class CreateTrade extends Component{
                                 <Radio
                                     ref="sideCT"
                                     id="sideCT"
-                                    checked={this.state.trade.side === 'Buy'}
-                                    onChange={this.handleChange}
+                                    checked={this.state.side === 'Buy'}
+                                    onChange={this.handleChange.bind(this)}
                                     value="Buy"
                                     name="side"
                                     aria-label="Buy"
@@ -208,10 +203,10 @@ export default class CreateTrade extends Component{
                                 <Radio
                                     id="sideCT"
                                     ref="sideCT"
-                                    checked={this.state.trade.side === 'Sell'}
-                                    onChange={this.handleChange}
-                                    value="Sell"
+                                    checked={this.state.side === 'Sell'}
+                                    onChange={this.handleChange.bind(this)}
                                     name="side"
+                                    value="Sell"
                                     aria-label="Sell"
                                     label="Sell"
                                 /> Sell
@@ -223,8 +218,9 @@ export default class CreateTrade extends Component{
                                 <FormControl className={this.classes.formControl}>
                                     {/* <InputLabel htmlFor="uncontrolled-native">Counterparty</InputLabel> */}
                                         {this.state.counterParties.length > 0 ?
-                                    <Select native defaultValue={this.state.trade.counterParty} 
-                                    input={<Input id="counterPartyCT" />}>
+                                    <Select native defaultValue={this.state.counterParty} 
+                                    input={<Input id="counterPartyCT" />} value={this.state.counterParty}
+                                            onChange={(e) => this.setState({counterParty:e.target.value})}>
                                             {
                                         this.state.counterParties.map(n=> {
                                         return (<option value={n.symbol}>{n.name}</option>);
@@ -246,13 +242,20 @@ export default class CreateTrade extends Component{
                             </td>
                         </tr>
                         <tr>
+                            <td>Quantity</td>
+                            <td>
+                                <input type='text' value={this.state.quantity} onChange={e=> this.setState({quantity: e.target.value})} />
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Location</td>
                             <td>
                                 <FormControl className={this.classes.formControl}>
                                     {/* <InputLabel htmlFor="uncontrolled-native">Location</InputLabel> */}
                                     {this.state.locations.length > 0 ?
-                                        <Select native defaultValue={this.state.trade.location} 
-                                        input={<Input id="locationCT" />}>
+                                        <Select native defaultValue={this.state.location} 
+                                        input={<Input id="locationCT" />} value={this.state.location}
+                                        onChange = {e => this.setState({location: e.target.value})}>
                                         {
                                         this.state.locations.map(n=> {
                                             return (<option value={n.symbol}>{n.name}</option>);

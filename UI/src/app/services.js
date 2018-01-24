@@ -50,7 +50,14 @@ export function fetchCounterParties() {
     return fetchJson(REF_DATA_SERVICE_API_END_POINT + "/entities/counterparties");
 }
 
-export function getMarketDataList() {
+export function fetchMarketPrices() {
     return fetchJson(MKT_DATA_SERVICE_API_END_POINT + "/price/all");
 }
 
+export function fetchCommodities(){
+    return fetchJson(REF_DATA_SERVICE_API_END_POINT + "/entities/commodities");
+}
+
+export function fetchLocations(){
+    return fetchJson(REF_DATA_SERVICE_API_END_POINT + "/entities/locations");
+}

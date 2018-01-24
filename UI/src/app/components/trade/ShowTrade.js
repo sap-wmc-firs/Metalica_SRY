@@ -15,6 +15,17 @@ export default class ShowTrade extends Component{
 
         this.classes = props;
     }
+    
+    deleteTrade(){
+        fetch('localhost:9001/api/trade-data-service/tradeservice/delete/trade', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({tradeId: this.props.trade.tradeId})
+          })
+        this.props.hideShowPanel();
+    }
 
     render(){
         return(
@@ -24,7 +35,7 @@ export default class ShowTrade extends Component{
                         <Typography type="Subheading" color="secondary">
                         Trade ID: {this.props.trade.tradeId}
                         <Icon icon={pencil} onClick={() => this.props.editAction()} />
-                        <Icon icon={bin} />
+                        <Icon icon={bin} onClick={this.deleteTrade.bind(this)}/>
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -52,7 +63,7 @@ export default class ShowTrade extends Component{
                         </TableRow>
                         <TableRow>
                             <TableCell>Location</TableCell>
-                            <TableCell>{this.props.trade.locationId}</TableCell>
+                            <TableCell>{this.props.trade.location}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

@@ -5,6 +5,9 @@ const INITIAL_STATE = {
     selected: {},
     mktPrices: [],
     trades: [],
+    commodities: [],
+    counterParties: [],
+    locations: [],
     loading: false,
     error: false,
     errorMessage: ''
@@ -17,6 +20,13 @@ export default function tradeReducer(state = INITIAL_STATE, action){
 
         case ActionTypes.MKT_PRICE_UPDATED: {
             console.log("MKT_PRICE_UPDATED called");
+            let mkPriceData = state.mktPrices;
+            mkPriceData = mkPriceData.concat(action.payload.marketPrice);
+            return Object.assign({}, state, {mktPrices : mkPriceData})
+        }
+            
+        case ActionTypes.INIT_MARKET_PRICE: {
+            console.log("MKT_PRICE_INIT called");
             let mkPriceData = state.mktPrices;
             mkPriceData = mkPriceData.concat(action.payload.mktPrices);
             return Object.assign({}, state, {mkPriceData})
@@ -31,9 +41,25 @@ export default function tradeReducer(state = INITIAL_STATE, action){
         }
 
         case ActionTypes.INIT_TRADES: {
-            let trades = state.trades;
-            trades = trades.concat(action.payload.trades);
-            return Object.assign({}, state, {trades})
+            return Object.assign({}, state, {trades: action.payload.trades})
+        }
+            
+        case ActionTypes.INIT_COMMODITIES: {
+            let commodities = state.commodities;
+            commodities = action.payload.commodities;
+            return Object.assign({}, state, {commodities})
+        }
+            
+        case ActionTypes.INIT_COUNTERPARTIES: {
+            let counterParties = state.counterParties;
+            counterParties = action.payload.counterParties;
+            return Object.assign({}, state, {counterParties})
+        }
+        
+        case ActionTypes.INIT_LOCATIONS: {
+            let locations = state.locations;
+            locations = action.payload.locations;
+            return Object.assign({}, state, {locations})
         }
 
         case ActionTypes.SHOW_RIGHT_PANEL: {
