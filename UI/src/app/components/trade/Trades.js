@@ -58,7 +58,7 @@ export default class Trades extends Component{
                 alert( "There seems to be an issue with Data Notification Service !!" );
         } );
         this.state.socket.on( 'TRADE_ADDED', ( socketData ) => {
-            alert(socketData);
+            //alert(socketData);
             var respData = JSON.parse(socketData);
             //alert(respData);
                if(respData.length > 0){

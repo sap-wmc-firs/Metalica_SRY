@@ -17,7 +17,7 @@ export default class ShowTrade extends Component{
     }
     
     deleteTrade(){
-        fetch('localhost:9001/api/trade-data-service/tradeservice/delete/trade', {
+        fetch('http://localhost:9001/api/trade-data-service/tradeservice/delete/trade', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

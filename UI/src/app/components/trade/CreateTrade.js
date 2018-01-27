@@ -49,29 +49,37 @@ export default class CreateTrade extends Component{
         }
         
         if('refData' in this.props){
-            this.setState({
-                locations:this.props.refData.locations,
-                 counterParties:this.props.refData.counterParties,
-                 commodities:this.props.refData.commodities
-            }) 
             var elements = {};
             var data = this.props.refData.marketPrices;
             data.forEach(item=>{
                 elements[item.symbol] = item.price;
             })
             this.setState({elements:elements});
-            if(this.props.refData.commodities.length > 0){
-                this.setState({price:elements[this.props.refData.commodities[0].symbol]});
+
+            if(this.props.isEditable == 'true'){
+                this.setState({trade: this.props.trade});
+                if(this.props.refData.commodities.length > 0){
+                    this.setState({price:elements[this.props.trade.commodity]});
+                }
+                this.setState({
+                    locations:this.props.refData.locations,
+                    counterParties:this.props.refData.counterParties,
+                    commodities:this.props.refData.commodities
+                });
+            } else {
+                if(this.props.refData.commodities.length > 0){
+                    this.setState({price:elements[this.props.refData.commodities[0].symbol]});
+                }
+                this.setState({
+                    commodity: this.props.refData.commodities[0].symbol,
+                    location: this.props.refData.locations[0].symbol,
+                    counterParty: this.props.refData.counterParties[0].symbol
+                });
             }
-            this.setState({
-                commodity: this.props.refData.commodities[0].symbol,
-                 location: this.props.refData.locations[0].symbol,
-                 counterParty: this.props.refData.counterParties[0].symbol
-            });
-        }
-        
-        if(this.props.isEditable == 'true'){
-            this.setState({trade: this.props.trade})
+            
+            
+            
+            
         }
         
         this.state.socket = io.connect('http://localhost:9003');
@@ -112,6 +120,7 @@ export default class CreateTrade extends Component{
         tradeObj.counterParty = this.state.counterParty;
         tradeObj.commodity = this.state.commodity;
         tradeObj.location = this.state.location;
+        tradeObj.status = "OPEN";
 
         this.state.trade = tradeObj;
         

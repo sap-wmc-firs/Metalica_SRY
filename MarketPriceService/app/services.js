@@ -31,7 +31,7 @@ var getSymbolPrice = function (req, res, next) {
 
 function postUpdateToNotificationService(dataToSend){
     var headers = {
-        'User-Agent':       'Super Agent/0.0.1',
+        'User-Agent':       'NodeJS_MktPriceService/0.0.1',
         'Content-Type':     'application/json'
     }
     

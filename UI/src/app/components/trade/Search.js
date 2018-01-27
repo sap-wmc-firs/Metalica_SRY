@@ -53,9 +53,15 @@ export default class Search extends React.Component {
   }
 
   search(){
-    this.props.filterTrades({to:this.state.toDate, from:this.state.fromDate, location: this.state.location, 
-                            commodity: this.state.commodity, counterParty: this.state.counterParty,
-                            side: this.state.side})
+    this.props.filterTrades(
+        {
+          to:this.state.toDate, 
+          from:this.state.fromDate, 
+          location: this.state.location, 
+          commodity: this.state.commodity, 
+          counterParty: this.state.counterParty,
+          side: this.state.side
+        })
   }
     
   render(){
@@ -65,7 +71,7 @@ export default class Search extends React.Component {
           className="col-md-2"
           style={{width: '13%'}}
           id="tradeDateSearch"
-          label="Trade Date"
+          label="Trade Date (From)"
           type="date"
           value={this.state.fromDate}
           onChange={(e) => this.setState({fromDate: e.target.value})}
@@ -78,7 +84,7 @@ export default class Search extends React.Component {
           className="col-md-2"
           style={{width: '13%'}}
           id="toTradeDateSearch"
-          label="To Trade Date"
+          label="Trade Date (To)"
           type="date"
           value={this.state.toDate}
           onChange={(e) => this.setState({toDate: e.target.value})}

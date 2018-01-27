@@ -4,7 +4,7 @@
 		"description": "Trade Service",
 		"main": "index.js",
 		"scripts": {
-				"test": "echo \"Error: no test specified\" && exit 1",
+				"test": "mocha --timeout 10000",
 				"start": "node index.js"
 		},
 		"dependencies": {
@@ -16,6 +16,11 @@
 				"request": "^2.74.0",
 				"socket.io": "^2.0.4",
 				"winston": "^2.4.0"
+		},
+		"devDependencies": {
+		  "chai": "^4.1.2",
+		  "chai-http": "^3.0.0",
+		  "mocha": "^5.0.0"
 		},
 		"author": "Sitaram Yadav",
 		"license": "ISC"

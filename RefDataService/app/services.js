@@ -19,14 +19,14 @@ var getUserName = function(req, res, next) {
 };
   
 var getEntities = function (req, res, next) {
-	handleRefServiceRequest(res, null, req.params.type, null);
+	handleRefServiceRequest(req, res, req.params.type, null);
 };
   
 var getEntitiesDetails = function (req, res, next) {
-	handleRefServiceRequest(res, null, req.params.type, req.params.symbol.toUpperCase());
+	handleRefServiceRequest(req, res, req.params.type, req.params.symbol.toUpperCase());
 };
 
-function handleRefServiceRequest(res, socket, entity, symbol) {
+function handleRefServiceRequest(req, res, entity, symbol) {
     console.log('entity symbol - ' + symbol);
     var query = symbol ? {
         symbol
@@ -35,48 +35,19 @@ function handleRefServiceRequest(res, socket, entity, symbol) {
     mongoDB.onConnect(function (err, db, objectId) {
         if (err) {
             console.log(err.stack);
-            if (res) {
-                res.end('Failed to connect with mongo db');
-            } else {
-                socket.emit('REFENTITY', {
-                    symbol: symbol,
-                    error: 'Failed to connect with mongo db'
-                });
-            }
+            res.end('Failed to connect with mongo db');
         } else {
             db.collection(entity).find(query).toArray(function (err, mongoRes) {
                 if (err) {
                     console.log(err.stack);
-                    if (res) {
-                        res.end('Failed to get data from collection');
-                    } else {
-                        socket.emit('REFENTITY', {
-                            symbol: symbol,
-                            error: 'Failed to get data from collection'
-                        });
-                    }
+                    res.end('Failed to get data from collection');
                 } else {
                     if (mongoRes.length > 0) {
                         var data = JSON.stringify(symbol ? mongoRes[0] : mongoRes);
                         console.log(data);
-                        if (res) {
-                            res.end(data);
-                        } else {
-                            socket.emit('REFENTITY', {
-                                symbol,
-                                entity,
-                                data
-                            });
-                        }
+                        res.end(data);
                     } else {
-                        if (res) {
-                            res.end('{"error: "no record found for entity - ' + entity + ' symbol - ' + symbol + '"}');
-                        } else {
-                            socket.emit('REFENTITY', {
-                                symbol: symbol,
-                                error: 'no record found for entity - ' + entity + ' symbol - ' + symbol
-                            });
-                        }
+                        res.end('{"error: "no record found for entity - ' + entity + ' symbol - ' + symbol + '"}');
                     }
                 }
             });

@@ -12,62 +12,38 @@ var health = function(req, res, next) {
 };
 
 var getAllTrades = function(req, res, next) {
-	console.log("get all trades.");
-	getAllTradesServiceRequest(res, null);
+	console.log("getAllTrades method called.");
+	getAllTradesServiceRequest(req, res);
 };
 
 var updateTrade =  function(req, res, next){
-	console.log("update trade");
-	updateTradeServiceRequest(res, null, req.body);
+	console.log("updateTrade method called.");
+	updateTradeServiceRequest(req, res);
 };
 
 var deleteTrade = function(req, res, next){
-    console.log("delete trade");
-	deleteTradeServiceRequest(res, null, req.body);
+    console.log("deleteTrade method called.");
+	deleteTradeServiceRequest(req, res);
 };
 
 // request handlers
-function getAllTradesServiceRequest(res, socket) {
+function getAllTradesServiceRequest(req, res) {
 	mongoDB.onConnect(function (err, db, objectId) {
         if (err) {
             console.log(err.stack);
-            if (res) {
-                res.end('Failed to connect with mongo db.');
-            } else {
-                socket.emit('ALLTRADES', {
-                    error: 'Failed to connect with mongo db'
-                });
-            }
+            res.end('Failed to connect with mongo db.');
         } else {
             db.collection('trades').find({}, {_id:0}).toArray(function (err, mongoRes) {
                 if (err) {
                     console.log(err.stack);
-                    if (res) {
-                        res.end('Failed to get data from collection');
-                    } else {
-                        socket.emit('ALLTRADES', {
-                            error: 'Failed to get data from collection'
-                        });
-                    }
-                } else {
+					res.end('Failed to get data from collection');
+				} else {
                     if (mongoRes.length > 0) {
                         var data = JSON.stringify(mongoRes);
                         console.log(data);
-						if (res) {
-                            res.end(data);
-                        } else {
-                            socket.emit('ALLTRADES', {
-                                data
-                            });
-                        }
+						res.end(data);
                     } else {
-                        if (res) {
-                            res.end('{"error: "no trade record found"}');
-                        } else {
-                            socket.emit('ALLTRADES', {
-                                error: '{"error: "no trade record found"}'
-                            });
-                        }
+                        res.end('{"error: "no trade record found"}');
                     }
                 }
             });
@@ -75,53 +51,25 @@ function getAllTradesServiceRequest(res, socket) {
     });
 }
 
-function updateTradeServiceRequest(res, socket, req) {
-	console.log("req.body ::"+req.body);
-	if (req!==undefined && req!==null) {
-		var side = req.side;
-		if (side===undefined || side===null) {
-			side = "";
-		}
-		var quantity = req.quantity;
-		if (quantity===undefined || quantity===null) {
-			quantity = "";
-		}
-		var price = req.price;
-		if (price===undefined || price===null) {
-			price = "";
-		}
-		var tradeDate = req.tradeDate;
-		if (tradeDate===undefined || tradeDate===null) {
-			tradeDate = "";
-		}
-		var status = req.status;
-		if (status===undefined || status===null) {
-			status = "";
-		}
-		var counterParty = req.counterParty;
-		if (counterParty===undefined || counterParty===null) {
-			counterParty = "";
-		}
-		var commodity = req.commodity;
-		if (commodity===undefined || commodity===null) {
-			commodity = "";
-		}
-		var location = req.location;
-		if (location===undefined || location===null) {
-			location = "";
-		}
-		if(req.tradeId===undefined || req.tradeId===null) {
+function getTradeRequestObject(req) {
+	var reqObject = null;
+	console.log("req.body :: "+req.body);
+	if(req.body != null) {
+		reqObject = req.body;
+	}
+	return reqObject;
+}
+
+function updateTradeServiceRequest(req, res) {
+	var reqObject = getTradeRequestObject(req);
+	if (reqObject != null) {
+		
+		if(reqObject.tradeId === null) {
 			//new insert
 			mongoDB.onConnect(function (err, db, objectId) {
 				if (err) {
 					console.log(err.stack);
-					if (res) {
-						res.end('failed to connect with mongo db');
-					} else {
-						socket.emit('UPDATETRADE', {
-							error: 'failed to connect with mongo db'
-						});
-					}
+					res.end('failed to connect with mongo db');
 				}
 				else {
 					var message;
@@ -136,136 +84,74 @@ function updateTradeServiceRequest(res, socket, req) {
 							message=err;
 							db.close();
 						}else{
-							tradeId = output.value.seq;
-							var obj = {
-								 tradeId: tradeId,
-								 side: side,
-								 quantity: quantity,
-								 price: price,
-								 tradeDate: tradeDate,
-								 status: status,
-								 counterParty: counterParty,
-								 commodity: commodity,
-								 location: location
-							};
-							db.collection("trades").insert(obj, function(err, res) {
+							reqObject.tradeId = output.value.seq;
+							db.collection("trades").insert(reqObject, function(err, res) {
 								if (err) {
 									message = err;
 								}
 								else {
-									message = "trade inserted."
+									message = "Trade has been successfully inserted."
 								}
 								db.close();
+								getAllTradesAndSendDataToNotificationService();
 							});
-							sendDataToNotificationService(obj);
 						}
-					});			
-					if (res) {
 						res.end(message);
-					} else {
-						socket.emit('ALLTRADES', {
-							message
-						});
-					}					
+					});			
+										
 				}
 			});
 		}
 		else {
-			//old update
+			// Update Trade
+			var message = "";
 			mongoDB.onConnect(function (err, db, objectId) {
 				if (err) {
-					if (res) {
-						res.end('failed to connect with mongo db');
-					} else {
-						socket.emit('UPDATETRADE', {
-							error: 'failed to connect with mongo db'
-						});
-					}
+					//res.end('failed to connect with mongo db');
+					message = "Failed to connect with mongo db";
 				}
 				else {
-					var obj = {
-						 tradeId: req.tradeId,
-						 side: side,
-						 quantity: quantity,
-						 price: price,
-						 tradeDate: tradeDate,
-						 status: status,
-						 counterParty: counterParty,
-						 commodity: commodity,
-						 location: location
-					};
-					db.collection("trades").update(
-					   { tradeId: req.tradeId},
-							obj
-					)
-					var successMessage = "trade updated.";
-					var dataToSend = JSON.stringify(obj);
-					console.log(dataToSend);
-					sendDataToNotificationService(dataToSend);
-					if (res) {
-                        res.end(successMessage);
-                    } else {
-                        socket.emit('UPDATETRADE', {
-                            successMessage
-                        });
-                    }
+					db.collection("trades").update({tradeId: reqObject.tradeId}, reqObject);
+					db.close();
+					getAllTradesAndSendDataToNotificationService();
+					message = "Trade has been successfully updated.";
+					//res.end("Trade has been successfully updated.");
 				}
 			});
+			res.end(message);
 		}
 	}
 	else {
-		if (res) {
-            res.end('Invalid Request.');
-        } else {
-			socket.emit('UPDATETRADE', {
-				error: 'Invalid Request.'
-			});
-		}
+		res.end('Invalid Request.');
 	}
 }
 
 
-function deleteTradeServiceRequest(res, socket, req) {
-	if (req!==undefined && req!==null) {
+function deleteTradeServiceRequest(req, res) {
+	var reqObject = getTradeRequestObject(req);
+	if (reqObject !== null) {
+		console.log("Delete req for tradeID :"+ reqObject.tradeId);
 		mongoDB.onConnect(function (err, db, objectId) {
 			if (err) {
-				if (res) {
-					res.end('failed to connect with mongo db');
-					} else {
-					socket.emit('DELETETRADE', {
-						error: 'failed to connect with mongo db'
-					});
-				}
+				res.end('failed to connect with mongo db');
 			}
 			else {
-				db.collection("trades").remove({ tradeId : req.tradeId });
-				var successMessage = "deleted trade";
-				if (res) {
-					res.end(successMessage);
-				} 
-				else {
-					socket.emit('DELETETRADE', {
-						successMessage
-					});
-				}
+				db.collection("trades").remove({ tradeId : reqObject.tradeId });
+				db.close();
+				getAllTradesAndSendDataToNotificationService();
+				res.end("Trade has been successfully deleted.");
 			}
 		});
 	}
 	else {
-		if (res) {
-            res.end('Invalid Request.');
-        } else {
-			socket.emit('DELETETRADE', {
-				error: 'Invalid Request.'
-			});
-		}
+		res.end('Invalid Request.');
 	}
 }
 
 function sendDataToNotificationService(obj) {
 	console.log("object : "+obj);
 	var headers = {
-        'User-Agent':       'Super Agent/0.0.1',
+        'User-Agent':       'NodeJS_TradeService/0.0.1',
         'Content-Type':     'application/json'
 	}
 	
@@ -277,15 +163,6 @@ function sendDataToNotificationService(obj) {
 	};
 
 	console.log("Sending request to notification service.");
-	/*request(options, function(error, response, body) {
-        if(error) {
-            console.log(error);
-        } else {
-            console.log(response);
-            console.log(body);
-        }
-	});*/
-	
 	// Start the request
     request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -296,6 +173,28 @@ function sendDataToNotificationService(obj) {
 		}
     })
 }
+
+function getAllTradesAndSendDataToNotificationService() {
+	mongoDB.onConnect(function (err, db, objectId) {
+        if (err) {
+            console.log(err.stack);
+        } else {
+            db.collection('trades').find({}, {_id:0}).toArray(function (err, mongoRes) {
+                if (err) {
+                    console.log(err.stack);
+                } else {
+                    if (mongoRes.length > 0) {
+                        var data = JSON.stringify(mongoRes);
+						sendDataToNotificationService(data);
+					} else {
+						console.log("no trade record found.");
+                    }
+                }
+            });
+        }
+    });
+}
+
 
 module.exports = function(app) {
     var router = express.Router();            
