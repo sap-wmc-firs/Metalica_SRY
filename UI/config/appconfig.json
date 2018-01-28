@@ -1,0 +1,10 @@
+{
+    "NOTIFICATION_SERVICE_URL": "http://localhost:9003",
+    "UPDATE_TRADE_URI": "http://localhost:9001/api/trade-data-service/tradeservice/update/trade",
+    "DELETE_TRADE_URI": "http://localhost:9001/api/trade-data-service/tradeservice/delete/trade",
+    "GET_ALL_TRADE_URI": "http://localhost:9001/api/trade-data-service/tradeservice/get/trades/all",
+    "GET_ALL_COUNTER_PARTIES_URI": "http://localhost:9001/api/ref-data-service/refdataservice/entities/counterparties",
+    "GET_ALL_COMODITIES_URI": "http://localhost:9001/api/ref-data-service/refdataservice/entities/commodities",
+    "GET_ALL_LOCATIONS_URI": "http://localhost:9001/api/ref-data-service/refdataservice/entities/locations",
+    "GET_ALL_METAL_MKT_PRICE_URI": "http://localhost:9001/api/metal-price-service/mktpriceservice/price/all"
+}

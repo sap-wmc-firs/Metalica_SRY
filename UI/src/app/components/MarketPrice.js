@@ -8,6 +8,7 @@ import ListItem from 'material-ui/List/ListItem';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
+import appConfig from 'config';
 
 import Table, { TableBody, TableCell, TableHead, TableRow, TableFooter } from 'material-ui/Table';
 
@@ -28,7 +29,7 @@ class MarketPrice extends React.Component {
 
     componentDidMount() {
       
-      this.state.socket = io.connect( 'http://localhost:9003' );
+      this.state.socket = io.connect(appConfig.NOTIFICATION_SERVICE_URL);
       console.log("this.state.socket : "+this.state.socket);
 
       // listen to messages on socket

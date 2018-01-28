@@ -16,6 +16,8 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
 import Radio, { RadioGroup } from 'material-ui/Radio';
 
+import appConfig from 'config';
+
 
 export default class CreateTrade extends Component{
 
@@ -55,17 +57,22 @@ export default class CreateTrade extends Component{
                 elements[item.symbol] = item.price;
             })
             this.setState({elements:elements});
+            
+            this.setState({
+                locations:this.props.refData.locations,
+                counterParties:this.props.refData.counterParties,
+                commodities:this.props.refData.commodities
+            });
 
             if(this.props.isEditable == 'true'){
                 this.setState({trade: this.props.trade});
-                if(this.props.refData.commodities.length > 0){
-                    this.setState({price:elements[this.props.trade.commodity]});
-                }
                 this.setState({
-                    locations:this.props.refData.locations,
-                    counterParties:this.props.refData.counterParties,
-                    commodities:this.props.refData.commodities
+                    price: this.props.trade.price,
+                    commodity: this.props.trade.commodity,
+                    location: this.props.trade.location,
+                    counterParty: this.props.trade.counterParty
                 });
+                
             } else {
                 if(this.props.refData.commodities.length > 0){
                     this.setState({price:elements[this.props.refData.commodities[0].symbol]});
@@ -77,12 +84,9 @@ export default class CreateTrade extends Component{
                 });
             }
             
-            
-            
-            
         }
         
-        this.state.socket = io.connect('http://localhost:9003');
+        this.state.socket = io.connect(appConfig.NOTIFICATION_SERVICE_URL);
 
         this.state.socket.on( 'connect', () => {
             //alert("connected..");
@@ -126,7 +130,7 @@ export default class CreateTrade extends Component{
         
         console.log(this.state.trade);
 
-        fetch('http://localhost:9001/api/trade-data-service/tradeservice/update/trade', {
+        fetch(appConfig.UPDATE_TRADE_URI, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -222,6 +226,18 @@ export default class CreateTrade extends Component{
                           </td>
                         </tr>
                         <tr>
+                            <td>Quantity</td>
+                            <td>
+                                <input type='text' value={this.state.quantity} onChange={e=> this.setState({quantity: e.target.value})} />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td>
+                                <input type='text' value={this.state.price} onChange={e=> this.setState({price: e.target.value})} />
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Counterparty</td>
                             <td>
                                 <FormControl className={this.classes.formControl}>
@@ -243,18 +259,6 @@ export default class CreateTrade extends Component{
                                     </FormControl>
 
                            </td>
-                        </tr>
-                        <tr>
-                            <td>Price</td>
-                            <td>
-                                <div id="priceCT" ref="priceCT"> {this.state.price}</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Quantity</td>
-                            <td>
-                                <input type='text' value={this.state.quantity} onChange={e=> this.setState({quantity: e.target.value})} />
-                            </td>
                         </tr>
                         <tr>
                             <td>Location</td>

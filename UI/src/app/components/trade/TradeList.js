@@ -157,7 +157,7 @@ const styles = theme => ({
               </Paper>
             </Col>
             <Col md={3} xs={12}>
-              {showRightPanel === 'showTrade' && <ShowTrade trade = {this.props.selected} editAction = { () => this.loadEditPanel()} hideShowPanel = {this.hideShowPanel.bind(this)}/>}
+              {showRightPanel === 'showTrade' && <ShowTrade trade = {this.props.selected} editAction = { () => this.loadEditPanel()} hideShowPanel = {this.hideShowPanel.bind(this)} refData={this.props.refData}/>}
               {showRightPanel === 'createTrade' && <CreateTrade isEditable='false' trade = {this.props} showRightPanel = {(panelName) => this.props.showRightPanel(panelName)} refData={this.props.refData}/>}
               {showRightPanel === 'editTrade' && <CreateTrade isEditable='true' trade = {this.props.selected} showRightPanel = {(panelName) => this.props.showRightPanel(panelName)} refData={this.props.refData}/>}
             </Col>

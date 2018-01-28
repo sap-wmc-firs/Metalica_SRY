@@ -7,17 +7,44 @@ import Icon from 'react-icons-kit';
 import { bin } from 'react-icons-kit/icomoon/bin';
 import { pencil } from 'react-icons-kit/icomoon/pencil'; 
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import appConfig from 'config';
+
 
 export default class ShowTrade extends Component{
 
     constructor(props){
         super(props);
-
         this.classes = props;
+        this.state = {
+            commodities : {},
+            locations: {},
+            counterParties: {}
+        }
     }
+
+
+
+    componentDidMount(){
+       if('refData' in this.props){
+           var commodities = {};
+           this.props.refData.commodities.forEach(item=>{
+                commodities[item.symbol] = item.name;
+           });
+            var counterParties = {};
+            this.props.refData.counterParties.forEach(item=>{
+                counterParties[item.symbol] = item.name;
+           });
+            var locations = {};
+            this.props.refData.locations.forEach(item=>{
+                locations[item.symbol] = item.name;
+           });
+           this.setState({commodities, counterParties, locations});
+        }
+    }
+     
     
     deleteTrade(){
-        fetch('http://localhost:9001/api/trade-data-service/tradeservice/delete/trade', {
+        fetch(appConfig.DELETE_TRADE_URI, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -47,23 +74,27 @@ export default class ShowTrade extends Component{
                         </TableRow>
                         <TableRow>
                             <TableCell>Commodity</TableCell>
-                            <TableCell>{this.props.trade.commodity}</TableCell>
+                            <TableCell>{this.state.commodities[this.props.trade.commodity]}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Side</TableCell>
                             <TableCell>{this.props.trade.side}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Counterparty</TableCell>
-                            <TableCell>{this.props.trade.counterParty}</TableCell>
+                            <TableCell>Quantity</TableCell>
+                            <TableCell>{this.props.trade.quantity}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Price</TableCell>
                             <TableCell>{this.props.trade.price}</TableCell>
                         </TableRow>
                         <TableRow>
+                            <TableCell>Counterparty</TableCell>
+                            <TableCell>{this.state.counterParties[this.props.trade.counterParty]}</TableCell>
+                        </TableRow>
+                        <TableRow>
                             <TableCell>Location</TableCell>
-                            <TableCell>{this.props.trade.location}</TableCell>
+                            <TableCell>{this.state.locations[this.props.trade.location]}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

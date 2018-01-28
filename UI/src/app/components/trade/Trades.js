@@ -15,6 +15,8 @@ import TradeList from "./TradeList";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 
+import appConfig from 'config';
+
 import * as actions from "../../state/actions";
 
 
@@ -45,7 +47,7 @@ export default class Trades extends Component{
 
     componentDidMount() {
 
-        this.state.socket = io.connect( 'http://localhost:9003' );
+        this.state.socket = io.connect(appConfig.NOTIFICATION_SERVICE_URL);
 
         // listen to messages on socket
         // built-in message

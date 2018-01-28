@@ -1,63 +1,43 @@
-const API_END_POINT = "http://localhost:7070";
-//const TRADE_SERVICE_API_END_POINT = "http://localhost:8999";
-const TRADE_SERVICE_API_END_POINT = "http://localhost:9001/api/trade-data-service/tradeservice";
-const REF_DATA_SERVICE_API_END_POINT = "http://localhost:9001/api/ref-data-service/refdataservice";
-const MKT_DATA_SERVICE_API_END_POINT = "http://localhost:9001/api/metal-price-service/mktpriceservice";
+import appConfig from 'config';
 
 function fetchJson(url){
     return fetch(url).then(
         response => {
             console.log(response);
 
-            if (response.status == 400)
-            throw new Error( "bad request, check token or token expired");
-
-            if (response.status == 404)
-             throw new Error("Resource not found");
-
-             if (response.status == 403)
-              throw new Error("Not permitted, auth needed");
-
-             //generic
-             if (response.state >= 400 && response.status < 500) {
-                 throw new Error("client error");
-             }
-
-             if (response.status >= 500)
-                 throw new Error("Server error ");
-
-             if (response.status == 0)
-                 throw new Error("Check network connection ");
-
-           //since we can't know exact error
-            if (!response.ok) {
-             throw new Error("Request failed");
+            if (response.status == 400) {
+                throw new Error( "Bad request !");
             }
-            
+            if (response.status == 404) {
+                throw new Error("Resource not found.");
+            }
+            if (response.status >= 500) {
+                throw new Error("Server error");
+            }
+            //since we can't know exact error
+            if (!response.ok) {
+                throw new Error("Request failed !!");
+            }
             return response.json()
     })
 }
 
-export function fetchTrades() {
-    return fetchJson(API_END_POINT + "/getTrades");
-}
-
 export function getTradeDataList() {
-    return fetchJson(TRADE_SERVICE_API_END_POINT + "/get/trades/all");
-}
-
-export function fetchCounterParties() {
-    return fetchJson(REF_DATA_SERVICE_API_END_POINT + "/entities/counterparties");
+    return fetchJson(appConfig.GET_ALL_TRADE_URI);
 }
 
 export function fetchMarketPrices() {
-    return fetchJson(MKT_DATA_SERVICE_API_END_POINT + "/price/all");
+    return fetchJson(appConfig.GET_ALL_METAL_MKT_PRICE_URI);
+}
+
+export function fetchCounterParties() {
+    return fetchJson(appConfig.GET_ALL_COUNTER_PARTIES_URI);
 }
 
 export function fetchCommodities(){
-    return fetchJson(REF_DATA_SERVICE_API_END_POINT + "/entities/commodities");
+    return fetchJson(appConfig.GET_ALL_COMODITIES_URI);
 }
 
 export function fetchLocations(){
-    return fetchJson(REF_DATA_SERVICE_API_END_POINT + "/entities/locations");
+    return fetchJson(appConfig.GET_ALL_LOCATIONS_URI);
 }

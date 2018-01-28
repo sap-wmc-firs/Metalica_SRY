@@ -63,9 +63,9 @@ function getTradeRequestObject(req) {
 function updateTradeServiceRequest(req, res) {
 	var reqObject = getTradeRequestObject(req);
 	if (reqObject != null) {
-		
-		if(reqObject.tradeId === null) {
-			//new insert
+		console.log("reqObject.tradeId :: "+reqObject.tradeId);
+		if(reqObject.tradeId === undefined || reqObject.tradeId === null) {
+			console.log("Create new trade.");
 			mongoDB.onConnect(function (err, db, objectId) {
 				if (err) {
 					console.log(err.stack);
@@ -104,6 +104,7 @@ function updateTradeServiceRequest(req, res) {
 		}
 		else {
 			// Update Trade
+			console.log("Update trade for given tradeId");
 			var message = "";
 			mongoDB.onConnect(function (err, db, objectId) {
 				if (err) {
