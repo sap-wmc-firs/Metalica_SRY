@@ -106,13 +106,13 @@ const styles = theme => ({
                 <Table className={this.classes.table}>
                   <TableHead>
                     <TableRow >
-                      <TableCell>Trade Date</TableCell>
-                      <TableCell>Commodity</TableCell>
-                      <TableCell>Side</TableCell>
-                      <TableCell>Qty (MT)</TableCell>
-                      <TableCell>Price (/MT)</TableCell>
-                      <TableCell>Counterparty</TableCell>
-                      <TableCell>Location</TableCell>
+                      <TableCell><b>Trade Date</b></TableCell>
+                      <TableCell><b>Commodity</b></TableCell>
+                      <TableCell><b>Side</b></TableCell>
+                      <TableCell><b>Qty (MT)</b></TableCell>
+                      <TableCell><b>Price ($ /MT)</b></TableCell>
+                      <TableCell><b>Counterparty</b></TableCell>
+                      <TableCell><b>Location</b></TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>

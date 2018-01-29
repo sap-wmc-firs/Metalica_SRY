@@ -8,8 +8,14 @@ import store from "./app/store";
 import App from "./app/App";
 import OAuthWeb from 'oauthio-web';
 
+var uname = "Sitaram Yadav"
+console.log("User Name :: "+uname);
+render((<Provider store= {store} >
+        <App username={uname}/>
+</Provider>),
+       document.getElementById("root")); 
 
-
+/*
 console.log("OAUTH.io : pre init");
 OAuthWeb.OAuth.initialize('ee-zUzpQqr9ZeCMPlmWQk-EKfb4');
 console.log("OAUTH.io : post init");  
@@ -36,3 +42,4 @@ setTimeout(function(){
         }); 
 }, 1000);
 
+*/

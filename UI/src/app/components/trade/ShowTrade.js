@@ -69,31 +69,31 @@ export default class ShowTrade extends Component{
                 <Table>
                     <TableBody>
                         <TableRow>
-                            <TableCell>Trade Date</TableCell>
+                            <TableCell><b>Trade Date</b></TableCell>
                             <TableCell>{this.props.trade.tradeDate}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Commodity</TableCell>
+                            <TableCell><b>Commodity</b></TableCell>
                             <TableCell>{this.state.commodities[this.props.trade.commodity]}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Side</TableCell>
+                            <TableCell><b>Side</b></TableCell>
                             <TableCell>{this.props.trade.side}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Quantity</TableCell>
+                            <TableCell><b>Quantity</b></TableCell>
                             <TableCell>{this.props.trade.quantity}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Price</TableCell>
+                            <TableCell><b>Price</b></TableCell>
                             <TableCell>{this.props.trade.price}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Counterparty</TableCell>
+                            <TableCell><b>Counterparty</b></TableCell>
                             <TableCell>{this.state.counterParties[this.props.trade.counterParty]}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Location</TableCell>
+                            <TableCell><b>Location</b></TableCell>
                             <TableCell>{this.state.locations[this.props.trade.location]}</TableCell>
                         </TableRow>
                     </TableBody>
