@@ -9,19 +9,11 @@ import { FormGroup, FormControlLabel } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Radio from 'material-ui/Radio';
 import Button from 'material-ui/Button';
+import AppBar from 'material-ui/AppBar';
 
- const styles = theme => ({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 200,
-    },
-  });
-
+const style = {
+  margin: 12,
+};
 
 export default class Search extends React.Component {
 
@@ -66,16 +58,16 @@ export default class Search extends React.Component {
     
   render(){
       return (
+      <AppBar position="static" color="default">
       <form className="row">
         <TextField
           className="col-md-2"
-          style={{width: '13%'}}
+          style={{width: '13%', marginLeft:'25px' }}
           id="tradeDateSearch"
           label="Trade Date (From)"
           type="date"
           value={this.state.fromDate}
           onChange={(e) => this.setState({fromDate: e.target.value})}
-          //className={classes.textField}
           InputLabelProps={{
             shrink: true,
           }}
@@ -88,12 +80,11 @@ export default class Search extends React.Component {
           type="date"
           value={this.state.toDate}
           onChange={(e) => this.setState({toDate: e.target.value})}
-          //className={classes.textField}
           InputLabelProps={{
             shrink: true,
           }}
         />
-        <FormControl className="col-md-1" >
+        <FormControl className="col-md-1" style={{width: '10%'}}>
           <InputLabel htmlFor="commoditySearch">Commodity</InputLabel>
           <Select native defaultValue={0} input={<Input id="commoditySearch" />}
 value={this.state.commodity}
@@ -111,31 +102,26 @@ value={this.state.commodity}
             }
           </Select>
         </FormControl>
-        {/* <InputLabel htmlFor="sideSearch">Side</InputLabel> */}
+        
         <FormControl className="col-md-1" style={{width: '5%'}}>
-            Buy
+            <label>Buy</label>
             <Radio
               checked={this.state.side === 'Buy'}
               onChange={(e) => this.setState({side:'Buy'})}
-              value="Buy"
-label="Buy"
-            />
+              value="Buy" label="Buy"/>
           </FormControl>
         <FormControl className="col-md-1" style={{width: '5%'}}>
-            Sell
+            <label>Sell</label>
             <Radio
               checked={this.state.side === 'Sell'}
               onChange={(e) => this.setState({side:'Sell'})}
-              value="Sell"
-label="Sell"
-            />
+              value="Sell" label="Sell"/>
         </FormControl>
-        <FormControl className="col-md-2">
+        <FormControl className="col-md-2" style={{width: '12%'}}>
           <InputLabel htmlFor="counterpartySearch">Counterparty</InputLabel>
           <Select native defaultValue={0} input={<Input id="counterpartySearch" />} 
-value={this.state.counterParty}
-          onChange={(e) => this.setState({counterParty: e.target.value})}
->
+            value={this.state.counterParty}
+          onChange={(e) => this.setState({counterParty: e.target.value})}>
           <option value="0" />
           {'counterParties' in this.props.refData ? 
               this.props.refData.counterParties.map( n => {
@@ -147,15 +133,13 @@ value={this.state.counterParty}
               null
           }
           </Select>
-          {/* <FormHelperText>Uncontrolled</FormHelperText> */}
         </FormControl>
         &emsp;
-        <FormControl className="col-md-1">
+        <FormControl className="col-md-2" style={{width: '10%'}}>
           <InputLabel htmlFor="locationSearch">Location</InputLabel>
           <Select native defaultValue={0} input={<Input id="locationSearch" />}
-value={this.state.location}
-          onChange={(e) => this.setState({location: e.target.value})}
->
+            value={this.state.location}
+          onChange={(e) => this.setState({location: e.target.value})}>
           <option value="0" />
           {'locations' in this.props.refData ? 
               this.props.refData.locations.map( n => {
@@ -167,9 +151,10 @@ value={this.state.location}
           }
           </Select>
         </FormControl>
-        <Button onClick={this.clear.bind(this)}>clear</Button>
-        <Button onClick={this.search.bind(this)}>Search</Button>
+        <Button onClick={this.clear.bind(this)} style={style} raised>Clear</Button>
+        <Button onClick={this.search.bind(this)} style={style} raised color="primary">Search</Button>
       </form>
+      </AppBar>
     );
   }
   }
