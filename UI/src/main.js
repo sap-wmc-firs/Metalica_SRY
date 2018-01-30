@@ -8,16 +8,21 @@ import store from "./app/store";
 import App from "./app/App";
 import OAuthWeb from 'oauthio-web';
 
+// Hardcode user testing
+/*
 var uname = "Sitaram Yadav"
 console.log("User Name :: "+uname);
 render((<Provider store= {store} >
         <App username={uname}/>
 </Provider>),
        document.getElementById("root")); 
+*/
 
-/*
+// OAutho.io auth init and intergration
+const OAUTH_INIT_KEY =  "ee-zUzpQqr9ZeCMPlmWQk-EKfb4";
+
 console.log("OAUTH.io : pre init");
-OAuthWeb.OAuth.initialize('ee-zUzpQqr9ZeCMPlmWQk-EKfb4');
+OAuthWeb.OAuth.initialize(OAUTH_INIT_KEY);
 console.log("OAUTH.io : post init");  
 
 setTimeout(function(){ 
@@ -40,6 +45,5 @@ setTimeout(function(){
         }).fail(function (err) {
                 alert("Authentication error !!");
         }); 
-}, 1000);
+}, 500);
 
-*/

@@ -57,12 +57,14 @@ export default class ShowTrade extends Component{
     render(){
         return(
             <div>
-                <AppBar position="static">
+               <AppBar position="static" style={{ backgroundColor: '#CFD8DC' }}>
                     <Toolbar>
-                        <Typography type="Subheading" color="secondary">
-                        Trade ID: {this.props.trade.tradeId}
-                        <Icon icon={pencil} onClick={() => this.props.editAction()} />
-                        <Icon icon={bin} onClick={this.deleteTrade.bind(this)}/>
+                        <Typography  type="button" gutterBottom color="primary">
+                        Trade ID&nbsp;:&nbsp;{this.props.trade.tradeId}
+                        </Typography>
+                        <Typography  type="subheading" gutterBottom color="primary" align="right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;<Icon icon={pencil} onClick={() => this.props.editAction()} />&nbsp;]&nbsp;&nbsp;
+                        [&nbsp;<Icon icon={bin} onClick={this.deleteTrade.bind(this)}/>&nbsp;]
                         </Typography>
                     </Toolbar>
                 </AppBar>

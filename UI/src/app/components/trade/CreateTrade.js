@@ -146,16 +146,16 @@ export default class CreateTrade extends Component{
     render(){
         return(
              <div> 
-                 <AppBar position="static">
+                 <AppBar position="static" style={{ backgroundColor: '#CFD8DC' }}>
             
                     <Toolbar>
                         {this.props.isEditable == 'true'
             ?
-            <Typography type="Subheading" color="secondary">
-                        Trade ID(): {this.props.trade.tradeId}
+            <Typography  type="button" gutterBottom color="primary">
+                        Trade ID&nbsp;:&nbsp;{this.props.trade.tradeId}
                         </Typography>
             :
-            <Typography type="Subheading" color="secondary">
+            <Typography type="button" color="primary">
                         Create Trade
                         </Typography>
             }
@@ -281,13 +281,14 @@ export default class CreateTrade extends Component{
                                 </FormControl>
                              </td>
                         </tr>
+                        <br/>
                     </body>
                 </table>
                 <Button raised  className={this.classes.button} onClick = {() => this.props.showRightPanel('none')}>Cancel</Button>&emsp;
 {this.props.isEditable == 'true'?
      <Button raised  className={this.classes.button} onClick = {() => this.saveTrade()}>Update</Button>
 :
-<Button raised  className={this.classes.button} onClick = {() => this.saveTrade()}>Save</Button>
+<Button raised  className={this.classes.button} color="primary" onClick = {() => this.saveTrade()}>Save</Button>
 }
             </div> 
         )
